@@ -1,5 +1,4 @@
 ---
-#BEGIN
 title: "MBC_MD"
 author: "Adalberto Rada"
 date: "4/25/2021"
@@ -68,7 +67,3 @@ TOTALACCESOINTERNET <- data %>%
   dplyr::count(data$tipo_de_conexion_al_servicio_de_internet,ESTUDIANTES=estudiantes, sort = TRUE) 
 TOTALACCESOINTERNETAUX<- TOTALACCESOINTERNET$ESTUDIANTES>0
 ```
-```{r}
-#END
-```
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
