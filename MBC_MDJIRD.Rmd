@@ -1,0 +1,81 @@
+---
+title: "MBC_MD"
+author: "Adalberto Rada"
+date: "4/25/2021"
+output:
+  html_document: default
+params:
+  n: NA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(corrplot)
+library("FactoMineR") 
+library("factoextra")
+#setwd("/Users/adalrada/Documents/Files MBC/Insumos MBC 2021/ENAHO Nivel de Hogares")
+```
+
+## R Markdown
+
+
+```{r}
+data<-read.csv(params$n,header = TRUE,sep =";",dec=".",check.names= F,fileEncoding="latin1",stringsAsFactors=TRUE)
+#Analisis de distribucion de los datos
+data$ingreso_total_del_hogar_neto<-as.integer(data$ingreso_total_del_hogar_neto)
+boxplot(data$ingreso_total_del_hogar_neto, 
+        main = "Datos atipicos",
+        col = "lightblue")
+
+plot(data$nivel_de_pobreza)
+
+     
+plot(data$tipo_de_conexion_al_servicio_de_internet)
+#TELEFONOS
+ggplot(data = data,mapping = aes(x =cantidad_de_telefonos_celulares ,y=tipo_de_conexion_al_servicio_de_internet,color=tipo_de_conexion_al_servicio_de_internet,)) +
+ geom_col() +
+ labs(title = "TIPO DE ACCESO A INTERNET DESDE TELEFONOS",
+       x = "TOTAL DE TELEFONOS",
+       y = "TIPO DE ACCESO",
+       caption = "INEC")
+
+#TABLETAS
+ggplot(data = data,mapping = aes(x =cantidad_de_tabletas ,y=tipo_de_conexion_al_servicio_de_internet,color=tipo_de_conexion_al_servicio_de_internet,)) +
+ geom_col() +
+ labs(title = "TIPO DE ACCESO A INTERNET DESDE TABLETAS",
+       x = "TOTAL DE TABLETAS",
+       y = "TIPO DE ACCESO",
+       caption = "INEC")
+
+```
+
+## Including Plots
+
+
+
+```{r pressure, echo=FALSE}
+
+Acceso_Internet<- data %>%
+  select(tenenciaCompuP,tenenciaCompuE,tenenciaCompu,tenenciaTab,tenenciaCel,tenenciaDisMov,tenenciaTIC) %>%
+  dplyr::group_by(SUM = data$estudiantes)
+
+ggplot(Acceso_Internet, aes(x = tenenciaTIC, y = SUM)) + 
+  geom_point(size = .9) + 
+  geom_line() +
+  theme_light()  +
+  labs(title = "Acceso a dispositivo movil e internet",
+       subtitle = "",
+       x = "Posesion de dispositivos",
+       y = "Cantidad",
+       caption = "Fuente :INEC")
+
+
+TOTALACCESOINTERNET <- data %>%
+  dplyr::count(data$tipo_de_conexion_al_servicio_de_internet,ESTUDIANTES=estudiantes, sort = TRUE) 
+
+TOTALACCESOINTERNETAUX<- TOTALACCESOINTERNET$ESTUDIANTES>0
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
