@@ -1,69 +1,146 @@
 ---
-title: "MBC_MD"
-author: "Adalberto Rada"
+title: "PROPUESTA DE JIRD"
+author: "Adalberto Rada M, Isaac guerrero O, Jose Aley Jimenez"
 date: "4/25/2021"
 output:
-  html_document: default
+    html_document: default
 params:
-  n: NA
+    n: NA
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(ggplot2)
 library(corrplot)
-library("FactoMineR") 
+library(reshape2)
+library("FactoMineR")
 library("factoextra")
-#setwd("/Users/adalrada/Documents/Files MBC/Insumos MBC 2021/ENAHO Nivel de Hogares")
 ```
 
-## R Markdown
+## Analisis de tipos de acceso y distribucion de tecnologia
 
+```{r main}
+#data<-read.csv(params$n,header = TRUE,sep =";",dec=".",check.names= #F,fileEncoding="latin1",stringsAsFactors=TRUE)
 
-```{r}
-data<-read.csv(params$n,header = TRUE,sep =";",dec=".",check.names= F,fileEncoding="latin1",stringsAsFactors=TRUE)
+setwd("/Users/adalrada/Documents/Files MBC/Insumos MBC 2021/ENAHO Nivel de Hogares")
+data<-read.csv("enaho19_hogares_df_challenge.csv",header = TRUE,sep =";",dec=".",check.names= F,fileEncoding="latin1",stringsAsFactors=TRUE)
+
+#Resumen de datos y variables con cu clasificacion y valores de media , mediana y moda
+summary(data)
+
 #Analisis de distribucion de los datos
 data$ingreso_total_del_hogar_neto<-as.integer(data$ingreso_total_del_hogar_neto)
-boxplot(data$ingreso_total_del_hogar_neto, 
-        main = "Datos atipicos",
-        col = "lightblue")
-plot(data$nivel_de_pobreza)
-     
-plot(data$tipo_de_conexion_al_servicio_de_internet)
+
+##Distribución de acceso a TIC por hogar
+dat.m <- melt(data,id.vars='tenenciaTIC', measure.vars=c('estudiantes'))
+ggplot(dat.m) +
+      geom_boxplot(aes(x=tenenciaTIC, y=value, color=variable))+
+        labs(title = "Distribucion de cantidad de estudiantes con acceso a TIC",
+  x = "ACCESO A TIC",
+  y = "TOAL",
+  caption = "INEC")
+  
+#Niveles de pobreza
+ggplot(data) + geom_bar(aes(x = nivel_de_pobreza,color=nivel_de_pobreza))+
+  labs(title = "Niveles de pobreza",
+x = "Categoria",
+y = "Total",
+caption = "INEC")
+
+#Tipo de conexion a internet
+ggplot(data) + geom_bar(aes(x = tipo_de_conexion_al_servicio_de_internet,color=tipo_de_conexion_al_servicio_de_internet))+
+  theme(text = element_text(size=10),
+  axis.text.x = element_text(angle=90, hjust=1))+
+  labs(title = "Tipo de conexion a Internet",
+x = "Categoria",
+y = "Total",
+caption = "INEC")
+
+
 #TELEFONOS
 ggplot(data = data,mapping = aes(x =cantidad_de_telefonos_celulares ,y=tipo_de_conexion_al_servicio_de_internet,color=tipo_de_conexion_al_servicio_de_internet,)) +
- geom_col() +
- labs(title = "TIPO DE ACCESO A INTERNET DESDE TELEFONOS",
-       x = "TOTAL DE TELEFONOS",
-       y = "TIPO DE ACCESO",
-       caption = "INEC")
+geom_col() +
+labs(title = "TIPO DE ACCESO A INTERNET DESDE TELEFONOS",
+x = "TOTAL DE TELEFONOS",
+y = "TIPO DE ACCESO",
+caption = "INEC")
+
 #TABLETAS
 ggplot(data = data,mapping = aes(x =cantidad_de_tabletas ,y=tipo_de_conexion_al_servicio_de_internet,color=tipo_de_conexion_al_servicio_de_internet,)) +
- geom_col() +
- labs(title = "TIPO DE ACCESO A INTERNET DESDE TABLETAS",
-       x = "TOTAL DE TABLETAS",
-       y = "TIPO DE ACCESO",
-       caption = "INEC")
+geom_col() +
+labs(title = "TIPO DE ACCESO A INTERNET DESDE TABLETAS",
+x = "TOTAL DE TABLETAS",
+y = "TIPO DE ACCESO",
+caption = "INEC")
+
+#COMPUTADORAS DE ESCRITORIO
+ggplot(data = data,mapping = aes(x =cantidad_de_computadoras_de_escritorio ,y=tipo_de_conexion_al_servicio_de_internet,color=tipo_de_conexion_al_servicio_de_internet,)) +
+geom_col() +
+labs(title = "TIPO DE ACCESO A INTERNET DESDE COMPUTADORAS DE ESCRITORIO",
+x = "TOTAL DE COMPUTADORAS ESCRITORIO",
+y = "TIPO DE ACCESO",
+caption = "INEC")
+
+#PORTATILES
+ggplot(data = data,mapping = aes(x =cantidad_de_computadoras_portatiles ,y=tipo_de_conexion_al_servicio_de_internet,color=tipo_de_conexion_al_servicio_de_internet,)) +
+geom_col() +
+labs(title = "TIPO DE ACCESO A INTERNET DESDE PORTATILES",
+x = "TOTAL DE PORTATILES",
+y = "TIPO DE ACCESO",
+caption = "INEC")
 ```
 
-## Including Plots
 
+## SELECCION DE VARIABLES REPRESENTATIVAS, ANALISIS DE COMPONENTES PRINCIPALES
 
+```{r second, echo=FALSE}
+#SE DEFINE UN TEMA PARA LOS GRAFICOS DE REPRESENTACION DE DATOS
+mi.tema <- theme_grey() + theme(panel.border = element_rect(fill = NA,color = "white"),
+                                plot.title = element_text(hjust = 0.5))
+#seleccion de variables numericaas para posteriormente determinar su importancia
+num_cols <- unlist(lapply(data, is.numeric))         # Identify numeric columns
+num_cols
+datanumeric<- data[ , num_cols]                        # Subset numeric columns of data
+datanumeric <- na.omit(datanumeric)
+modelo <- prcomp(datanumeric,scale. = TRUE,center = TRUE)
+fviz_pca_ind(modelo, pointsize = 5, pointshape = 21, fill = "#E7B800", 
+             repel = TRUE,ggtheme = mi.tema)
+fviz_pca_var(modelo,col.var = "#2E9FDF",col.ind = "#696969",ggtheme = mi.tema)
+fviz_pca_biplot(modelo,col.var = "#2E9FDF",col.ind = "#696969",ggtheme = mi.tema)
 
-```{r pressure, echo=FALSE}
-Acceso_Internet<- data %>%
-  select(tenenciaCompuP,tenenciaCompuE,tenenciaCompu,tenenciaTab,tenenciaCel,tenenciaDisMov,tenenciaTIC) %>%
-  dplyr::group_by(SUM = data$estudiantes)
-ggplot(Acceso_Internet, aes(x = tenenciaTIC, y = SUM)) + 
-  geom_point(size = .9) + 
-  geom_line() +
-  theme_light()  +
-  labs(title = "Acceso a dispositivo movil e internet",
-       subtitle = "",
-       x = "Posesion de dispositivos",
-       y = "Cantidad",
-       caption = "Fuente :INEC")
+#ELIMINACION DE MAL REPRESENTADOS
+res<-PCA(datanumeric, scale.unit=TRUE, ncp=5, graph = FALSE)
+fviz_pca_ind(res, pointsize = 5, pointshape = 21, fill = "#E7B800", repel = TRUE, select.ind = list(cos2 = 0.15),ggtheme = mi.tema)
+fviz_pca_var(modelo,col.var = "#2E9FDF",col.ind = "#696969",ggtheme = mi.tema)
+fviz_pca_biplot(res, col.var = "#FF1171",col.ind = "darkblue",ggtheme = mi.tema, select.var = list(cos2 = 0.15),select.ind = list(cos2 = 0.15) )
+
+#clustering
+ClosteringConaminacion <- hclust(dist(datanumeric),method = "complete")
+ClosteringConaminacion
+
+```
+## Conexiones por cantidad de estudiantes
+```{r Third, echo=FALSE}
+#CALCULO DE TOTAL DE ESTUDIANTES CON SU METODO DE CONEXION
 TOTALACCESOINTERNET <- data %>%
-  dplyr::count(data$tipo_de_conexion_al_servicio_de_internet,ESTUDIANTES=estudiantes, sort = TRUE) 
-TOTALACCESOINTERNETAUX<- TOTALACCESOINTERNET$ESTUDIANTES>0
+dplyr::count(data$tipo_de_conexion_al_servicio_de_internet,ESTUDIANTES=estudiantes, sort = TRUE)
+#ELIMINACION DE DATOS NA , NO REPRESENTATIVOS
+TOTALACCESOINTERNET <- na.omit(TOTALACCESOINTERNET)
+#
+row_sub = apply(TOTALACCESOINTERNET, 1, function(row) all(row !=0 ))
+colnames(TOTALACCESOINTERNET) <- c("TC", "cantidad_estudiantes", "cantidad")
+TOTALACCESOINTERNET[row_sub,]
+
+
+
+gr4<-ggplot(TOTALACCESOINTERNET, aes(x=TC, y=cantidad)) + geom_bar(stat="identity") 
+gr4 + facet_grid(cantidad_estudiantes ~.)+
+    theme(text = element_text(size=8),
+  axis.text.x = element_text(angle=90, hjust=1))+
+labs(title = "Cantidad de conexiones por cantidad de estudaintes en hogares por tipos de conexion ",
+x = "TIPOS DE CONEXION",
+y = "CANTIDAD",
+caption = "INEC")
+
 ```
