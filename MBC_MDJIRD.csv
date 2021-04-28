@@ -21,10 +21,10 @@ library("factoextra")
 ## Analisis de tipos de acceso y distribucion de tecnologia
 
 ```{r main}
-#data<-read.csv(params$n,header = TRUE,sep =";",dec=".",check.names= #F,fileEncoding="latin1",stringsAsFactors=TRUE)
+data<-read.csv(params$n,header = TRUE,sep =";",dec=".",check.names= F,fileEncoding="latin1",stringsAsFactors=TRUE)
 
-setwd("/Users/adalrada/Documents/Files MBC/Insumos MBC 2021/ENAHO Nivel de Hogares")
-data<-read.csv("enaho19_hogares_df_challenge.csv",header = TRUE,sep =";",dec=".",check.names= F,fileEncoding="latin1",stringsAsFactors=TRUE)
+#setwd("/Users/adalrada/Documents/Files MBC/Insumos MBC 2021/ENAHO Nivel de Hogares")
+#data<-read.csv("enaho19_hogares_df_challenge.csv",header = TRUE,sep =";",dec=".",check.names= #F,fileEncoding="latin1",stringsAsFactors=TRUE)
 
 #Resumen de datos y variables con cu clasificacion y valores de media , mediana y moda
 summary(data)
