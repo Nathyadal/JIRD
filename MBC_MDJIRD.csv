@@ -3,7 +3,6 @@ title: "PROPUESTA DE JIRD"
 author: "Adalberto Rada M, Isaac guerrero O, Jose Aley Jimenez"
 date: "4/25/2021"
 output:
-  pdf_document: default
   html_document: default
 params:
   'FALSE': NA
