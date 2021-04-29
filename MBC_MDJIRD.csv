@@ -1,11 +1,11 @@
 ---
 title: "PROPUESTA DE JIRD"
 author: "Adalberto Rada M, Isaac guerrero O, Jose Aley Jimenez"
-date: "4/25/2021"
+date: "5/01/2021"
 output:
-  html_document: default
+    html_document: default
 params:
-   n: NA
+    n: NA
 ---
 
 ```{r setup, include=FALSE}
@@ -19,7 +19,7 @@ library("FactoMineR")
 library("factoextra")
 ```
 
-##ANÁLISIS DE TIPOS DE ACCESO Y DISTRIBUCIÓN DE TECNOLOGIA
+#ANÁLISIS DE TIPOS DE ACCESO Y DISTRIBUCIÓN DE TECNOLOGIA
 
 ```{r main}
 data<-read.csv(params$n,header = TRUE,sep =";",dec=".",check.names= F,fileEncoding="latin1",stringsAsFactors=TRUE)
@@ -91,7 +91,7 @@ x = "TOTAL DE PORTATILES",
 y = "TIPO DE ACCESO",
 caption = "INEC")
 ```
-## CONEXIONES POR CANTIDAD DE ESTUDIANTES
+#CONEXIONES POR CANTIDAD DE ESTUDIANTES
 ```{r Third, echo=FALSE}
 #CALCULO DE TOTAL DE ESTUDIANTES CON SU METODO DE CONEXION
 TOTALACCESOINTERNET <- data %>%
@@ -116,7 +116,7 @@ caption = "INEC")
 
 ```
 
-## SELECCION DE VARIABLES NUMERICA REPRESENTATIVAS, ANALISIS DE COMPONENTES PRINCIPALES
+#SELECCION DE VARIABLES NUMERICA REPRESENTATIVAS, ANALISIS DE COMPONENTES PRINCIPALES
 
 ```{r second, echo=FALSE, fig.width=15,fig.height=7}
 #SE DEFINE UN TEMA PARA LOS GRAFICOS DE REPRESENTACION DE DATOS
@@ -124,8 +124,8 @@ mi.tema <- theme_grey() + theme(panel.border = element_rect(fill = NA,color = "w
 plot.title = element_text(hjust = 0.5))
 
 #seleccion de variables numericaas para posteriormente determinar su importancia
-num_cols <- unlist(lapply(data, is.numeric))        
-datanumeric<- data[ , num_cols]                      
+num_cols <- unlist(lapply(data, is.numeric))
+datanumeric<- data[ , num_cols]
 datanumeric <- na.omit(datanumeric)
 
 #ELIMINACION DE DATOS
@@ -138,29 +138,29 @@ modelo <- prcomp(datanumeric,scale. = TRUE,center = TRUE)
 res<-PCA(datanumeric, scale.unit=TRUE, ncp=5, graph = FALSE)
 
 fviz_pca_ind(res, pointsize = 30,labelsize=6,pointshape = 60, fill = "#E7B800",gradient.cols =
-               c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE, select.ind = list(cos2 = 0.15),
-             ggtheme=mi.tema,addEllipses=TRUE, ellipse.level=0.95)+
-             scale_color_gradient2(low="red", mid="yellow",high="blue", midpoint=4)
+c("#00AFBB", "#E7B800", "#FC4E07"), repel = TRUE, select.ind = list(cos2 = 0.15),
+ggtheme=mi.tema,addEllipses=TRUE, ellipse.level=0.95)+
+scale_color_gradient2(low="red", mid="yellow",high="blue", midpoint=4)
 
 
-fviz_pca_var(modelo,col.var = "cos2",col.ind = "#696969",ggtheme = mi.tema,labelsize = 6, gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
-             repel = TRUE) +theme(text = element_text(size = 15),
-        axis.title = element_text(size = 15),
-        axis.text = element_text(size = 15))
+fviz_pca_var(modelo,col.var = "cos2",col.ind = "#696969",ggtheme = mi.tema,labelsize = 6, gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+repel = TRUE) +theme(text = element_text(size = 15),
+axis.title = element_text(size = 15),
+axis.text = element_text(size = 15))
 fviz_pca_biplot(res, label ="var", col.ind="cos2", select.var = list(cos2 = 0.25),select.ind = list(cos2 = 0.25),labelsize = 6) +
-       theme_minimal()
+theme_minimal()
 
 #NUMERO DE CLUSTER RECOJMENDADOS
-fviz_nbclust(x = datanumeric, FUNcluster = kmeans, method = "wss", k.max = 15, 
-             diss = get_dist(datanumeric, method = "euclidean"), nstart = 50)
+fviz_nbclust(x = datanumeric, FUNcluster = kmeans, method = "wss", k.max = 15,
+diss = get_dist(datanumeric, method = "euclidean"), nstart = 50)
 
-#CLUSTERING , clusteres recomendados 
+#CLUSTERING , clusteres recomendados
 ClosteringConaminacion <- hclust(dist(datanumeric),method = "complete")
 ClosteringConaminacion
 
 ```
 
-#CORRELACIÓN DE VARIABLES NUMÉRICAS MAS REPRESENTATIVAS 
+#CORRELACIÓN DE VARIABLES NUMÉRICAS MAS REPRESENTATIVAS
 ```{r fig.width=15,fig.height=10}
 datanumeric<-datanumeric[,-c(5,11,12,15,16,17,18,19)]
 
@@ -169,9 +169,9 @@ p.mat <- cor_pmat(datanumeric)
 #ANAlISIS DECORRELACION DE VARIABLES MAS REPRESENTATIVAS
 corr
 ggcorrplot(corr, hc.order = TRUE, outline.col = "white")+
-  theme(plot.title = element_text(size = 20, face = "bold"),
-    legend.title=element_text(size=20), 
-    legend.text=element_text(size=15))
+theme(plot.title = element_text(size = 20, face = "bold"),
+legend.title=element_text(size=20),
+legend.text=element_text(size=15))
 ```
 
 #ANALISIS DE DISTRIBUCION DE LA VARIABLE DE SERVICIOS DE INTERNET
@@ -185,18 +185,18 @@ x.test <- shapiro.test(xx)
 print(x.test)
 
 plotn <- function(xx,main="Histograma de frecuencias \ny distribución normal",
-                  xlab="X",ylab="Densidad") {
-                  min <- min(x)
-                  max <- max(x)
-                  media <- mean(xx)
-                  dt <- sd(xx)
-                  hist(xx,freq=F,main=main,xlab=xlab,ylab=ylab)
-                  curve(dnorm(x,media,dt), min, max,add = T,col="blue")
-                }
- 
+xlab="X",ylab="Densidad") {
+min <- min(x)
+max <- max(x)
+media <- mean(xx)
+dt <- sd(xx)
+hist(xx,freq=F,main=main,xlab=xlab,ylab=ylab)
+curve(dnorm(x,media,dt), min, max,add = T,col="blue")
+}
+
 plotn(xx,main="Distribución normal")#Grafico de x
 
-#Si nuestro valor de P-value es mayor  a 0.5 tenemos una distribucion normal en la variable , es 
+#Si nuestro valor de P-value es mayor  a 0.5 tenemos una distribucion normal en la variable , es
 #decir en este caso que hay una distribucion similar de los tipos de conexion
 #de lo contratio si es menor a este valor no es una distribucion normal
 ```
@@ -217,12 +217,11 @@ promedio_salario<-mean(data$ingreso_total_del_hogar_neto)
 #--correlacion obesidad y edad
 INGRESO_ESTUDIANTES=data.frame(data$estudiantes,data$ingreso_total_del_hogar_neto)
 corrplot(cor(INGRESO_ESTUDIANTES), method = "number")
-#EN CASO DE SER VALORES POR DEBAJO DE 0,5 SERIA UNA CORRELACION FUERTE NEGATIVA 
+#EN CASO DE SER VALORES POR DEBAJO DE 0,5 SERIA UNA CORRELACION FUERTE NEGATIVA
 #LO QUE NOS INDICARIA QUE A MENOR CANTIDAD DE ESTUDIANTES MAYORES INGRESOS NETOS HAY POR FAMILIA
 #DE DARNOS UN VALOR SUPERIOR A 0,5 INDICA QUE ENTRE MAS ESTUDIANTES , MENORES SON LOS INGRESOS
 
-#MODELO DE REGRESION PARA LA PREDICCION DE CANTIDAD DE ESTUDIANTES CON FAMILIAS CON INGRESOS 
+#MODELO DE REGRESION PARA LA PREDICCION DE CANTIDAD DE ESTUDIANTES CON FAMILIAS CON INGRESOS
 reg<-lm(formula = data$estudiantes ~ data$ingreso_total_del_hogar_neto==promedio_salario, data = data)
 summary(reg)
 ```
-
