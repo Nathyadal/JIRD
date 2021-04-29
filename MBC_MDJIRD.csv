@@ -212,7 +212,7 @@ TotalEstudiantes<-sum(data$estudiantes)
 cat("TOTAL ESTUDIANTES:")
 TotalEstudiantes
 cat("INGRESOS NETOS PROMEDIO:")
-mean(data$ingreso_total_del_hogar_neto)
+promedio_salario<-mean(data$ingreso_total_del_hogar_neto)
 #CORRELACION ENTRE LOS INGRESOS Y LOS ESTUDIANTES
 #--correlacion obesidad y edad
 INGRESO_ESTUDIANTES=data.frame(data$estudiantes,data$ingreso_total_del_hogar_neto)
@@ -222,7 +222,7 @@ corrplot(cor(INGRESO_ESTUDIANTES), method = "number")
 #DE DARNOS UN VALOR SUPERIOR A 0,5 INDICA QUE ENTRE MAS ESTUDIANTES , MENORES SON LOS INGRESOS
 
 #MODELO DE REGRESION PARA LA PREDICCION DE CANTIDAD DE ESTUDIANTES CON FAMILIAS CON INGRESOS 
-reg<-lm(formula = data$estudiantes ~ data$ingreso_total_del_hogar_neto==4003.556, data = data)
+reg<-lm(formula = data$estudiantes ~ data$ingreso_total_del_hogar_neto==promedio_salario, data = data)
 summary(reg)
 ```
 
