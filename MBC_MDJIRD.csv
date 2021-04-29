@@ -225,9 +225,10 @@ cat("TOTAL ESTUDIANTES:")
 TotalEstudiantes
 cat("INGRESOS NETOS PROMEDIO:")
 promedio_salario<-mean(data$ingreso_total_del_hogar_neto)
+promedio_salario
+#REGRESION LINEAL DE ESTUDIANTES CIN INGRESOS NETOS IGUAL AL PROMEDIO
+INGRESO_ESTUDIANTES=data.frame(data$estudiantes,data$ingreso_total_del_hogar_net)
 #CORRELACION ENTRE LOS INGRESOS Y LOS ESTUDIANTES
-#--correlacion obesidad y edad
-INGRESO_ESTUDIANTES=data.frame(data$estudiantes,data$ingreso_total_del_hogar_neto)
 corrplot(cor(INGRESO_ESTUDIANTES), method = "number")
 #EN CASO DE SER VALORES POR DEBAJO DE 0,5 SERIA UNA CORRELACION FUERTE NEGATIVA
 #LO QUE NOS INDICARIA QUE A MENOR CANTIDAD DE ESTUDIANTES MAYORES INGRESOS NETOS HAY POR FAMILIA
