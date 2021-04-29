@@ -19,7 +19,7 @@ library("FactoMineR")
 library("factoextra")
 ```
 
-#ANÁLISIS DE TIPOS DE ACCESO Y DISTRIBUCIÓN DE TECNOLOGIA
+# ANÁLISIS DE TIPOS DE ACCESO Y DISTRIBUCIÓN DE TECNOLOGIA
 
 ```{r main}
 data<-read.csv(params$n,header = TRUE,sep =";",dec=".",check.names= F,fileEncoding="latin1",stringsAsFactors=TRUE)
@@ -91,7 +91,9 @@ x = "TOTAL DE PORTATILES",
 y = "TIPO DE ACCESO",
 caption = "INEC")
 ```
-#CONEXIONES POR CANTIDAD DE ESTUDIANTES
+
+# CONEXIONES POR CANTIDAD DE ESTUDIANTES
+
 ```{r Third, echo=FALSE}
 #CALCULO DE TOTAL DE ESTUDIANTES CON SU METODO DE CONEXION
 TOTALACCESOINTERNET <- data %>%
@@ -116,7 +118,9 @@ caption = "INEC")
 
 ```
 
-#SELECCION DE VARIABLES NUMERICA REPRESENTATIVAS, ANALISIS DE COMPONENTES PRINCIPALES
+
+# SELECCION DE VARIABLES NUMERICA REPRESENTATIVAS, ANALISIS DE COMPONENTES PRINCIPALES
+
 
 ```{r second, echo=FALSE, fig.width=15,fig.height=7}
 #SE DEFINE UN TEMA PARA LOS GRAFICOS DE REPRESENTACION DE DATOS
@@ -160,7 +164,10 @@ ClosteringConaminacion
 
 ```
 
-#CORRELACIÓN DE VARIABLES NUMÉRICAS MAS REPRESENTATIVAS
+
+# CORRELACIÓN DE VARIABLES NUMÉRICAS MAS REPRESENTATIVAS
+
+
 ```{r fig.width=15,fig.height=10}
 datanumeric<-datanumeric[,-c(5,11,12,15,16,17,18,19)]
 
@@ -174,7 +181,10 @@ legend.title=element_text(size=20),
 legend.text=element_text(size=15))
 ```
 
-#ANALISIS DE DISTRIBUCION DE LA VARIABLE DE SERVICIOS DE INTERNET
+
+# ANALISIS DE DISTRIBUCION DE LA VARIABLE DE SERVICIOS DE INTERNET
+
+
 ```{r ,four}
 x <- rnorm(data$tipo_de_conexion_al_servicio_de_internet, mean=100, sd=15) # Creamos una variable normal con 100 valores
 hist(x, probability=TRUE)
@@ -201,7 +211,9 @@ plotn(xx,main="Distribución normal")#Grafico de x
 #de lo contratio si es menor a este valor no es una distribucion normal
 ```
 
-#ANALISIS PREDICTIVO DE INGRESOS NECESARIOS PARA AUMENTO DE ESCOLARIDAD
+
+# ANALISIS PREDICTIVO DE INGRESOS NECESARIOS PARA AUMENTO DE ESCOLARIDAD
+
 
 ```{r,five}
 #Total de TICS
